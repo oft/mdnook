@@ -1,26 +1,15 @@
 import assert from 'node:assert/strict'
 import { spawn, spawnSync } from 'node:child_process'
-import { access, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
-import { dirname, join, delimiter, relative, isAbsolute, sep } from 'node:path'
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { dirname, join, relative, isAbsolute, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:net'
+import { npmRuntime } from './npm-runtime.mjs'
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
 const manifest = JSON.parse(await readFile(join(root, 'packages/cli/package.json'), 'utf8'))
 const artifact = join(root, 'artifacts', `mdnook-${manifest.version}.tgz`)
 await access(artifact).catch(() => { throw new Error('请先执行 pnpm pack:cli 生成安装包') })
-
-async function findNpm() {
-  const candidates = [join(dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js')]
-  if (process.env.npm_execpath?.replaceAll('\\', '/').includes('/npm/')) candidates.push(process.env.npm_execpath)
-  for (const directory of (process.env.PATH ?? '').split(delimiter)) {
-    candidates.push(process.platform === 'win32' ? join(directory, 'node_modules/npm/bin/npm-cli.js') : join(directory, 'npm'))
-  }
-  for (const candidate of candidates) {
-    try { return await realpath(candidate) } catch { /* Try next installation. */ }
-  }
-  throw new Error('没有找到 npm CLI，请安装包含 npm 的 Node.js 发行版')
-}
 
 await mkdir(join(root, '.pack-check'), { recursive: true })
 const temporary = await mkdtemp(join(root, '.pack-check', 'install-'))
@@ -30,12 +19,8 @@ let child
 let output = ''
 try {
   await writeFile(join(temporary, 'package.json'), JSON.stringify({ private: true, type: 'module' }))
-  // pnpm exports its own settings as npm_config_*. Keep npm's network/cache
-  // settings, but do not accidentally turn pnpm options into npm flags.
-  const npmSettings = new Set(['registry', 'cache', 'proxy', 'https_proxy', 'strict_ssl', 'cafile', 'userconfig'])
-  const installationEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) =>
-    !/^npm_config_/i.test(key) || npmSettings.has(key.toLowerCase().slice('npm_config_'.length))))
-  const installation = spawnSync(process.execPath, [await findNpm(), 'install', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund', artifact], { cwd: temporary, env: installationEnv, stdio: 'inherit' })
+  const { cli, env } = await npmRuntime()
+  const installation = spawnSync(process.execPath, [cli, 'install', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund', artifact], { cwd: temporary, env, stdio: 'inherit' })
   assert.equal(installation.status, 0, '独立 npm 安装失败')
   const installed = join(temporary, 'node_modules/mdnook')
   const packaged = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8'))

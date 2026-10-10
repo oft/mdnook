@@ -1,0 +1,49 @@
+name: Publish npm
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      - name: Validate release tag
+        run: node scripts/check-release-tag.mjs
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11 --registry=https://registry.npmjs.org/
+      - run: pnpm install --frozen-lockfile
+      - name: Build and validate npm package
+        run: pnpm release:prepare
+      - name: Save tested tarball
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: mdnook-${{ github.ref_name }}
+          path: artifacts/mdnook-*.tgz
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+      - name: Publish to npm
+        run: node scripts/publish.mjs --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Verify registry version and integrity
+        run: node scripts/verify-publish.mjs

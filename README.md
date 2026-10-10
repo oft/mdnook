@@ -80,7 +80,27 @@ npm install -g ./artifacts/mdnook-0.0.1.tgz
 mdnook ./docs
 ```
 
-仓库内部包均为私有包，通过 esbuild 合并到 CLI，前端产物复制到 `dist/public`。正式发布前检查包名权限与包内容，然后在 `packages/cli` 发布；本仓库的构建和打包命令不会执行 npm publish。
+仓库内部包均为私有包，通过 esbuild 合并到 CLI，前端产物复制到 `dist/public`。
+
+## 发布到 npm
+
+在仓库根目录执行：
+
+```bash
+npm login --auth-type=web --registry=https://registry.npmjs.org/
+pnpm release:dry-run       # 构建、验证和发布预览，不上传
+pnpm release:npm           # 构建、验证并正式发布
+```
+
+两个命令均执行类型检查、测试、构建与独立安装验证，再使用 npm 发布当前 `packages/cli/package.json` 版本对应的 `.tgz`。目标为官方 registry，公开包，标签为 `latest`。如 npm 要求双因素认证，按终端提示完成即可。
+
+`pnpm release:prepare` 仅构建和验证。构建、打包及预览命令均不上传；只有 `release:npm` 执行正式发布。发布成功后可运行 `npm view mdnook@0.0.1 version --registry=https://registry.npmjs.org/` 确认；若 metadata 暂时返回 404，稍后重新查询即可。
+
+### GitHub 标签自动发布
+
+仓库包含 `.github/workflows/publish.yml`。推送与包版本一致的 `vX.X.X` 标签后，GitHub Actions 自动构建、测试并发布到 npm，保存安装包 artifact，再核对 registry 中的版本和 SHA-512。普通分支更新和 Pull Request 执行 CI 检查。
+
+首次发布配置仓库 Secret `NPM_TOKEN`；已有 npm 包可配置 `oft / mdnook / publish.yml` 为 Trusted Publisher，使用 OIDC 发布。凭据配置与推送步骤见 [GitHub Actions 发布说明](https://github.com/oft/mdnook/blob/main/.github/README.md)。
 
 ## API
 

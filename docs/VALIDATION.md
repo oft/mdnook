@@ -38,3 +38,11 @@
 ## 页面截图
 
 ![mdnook 桌面界面](./screenshots/mdnook-desktop.jpg)
+
+## GitHub Actions 配置验证
+
+- 新增 `ci.yml`：分支更新 / PR 的 Windows、Ubuntu 与 Node.js 22.12 / 24 检查矩阵。
+- 新增 `publish.yml`：`vX.X.X` 标签触发构建、安装验证、npm 发布、registry 版本与 SHA-512 核对。
+- actionlint 1.7.12：两个工作流的语法及 GitHub Actions 配置校验通过。
+- 本地 `pnpm release:dry-run` 通过：类型检查、12 项测试、构建、独立 npm 安装和发布预览。其中 3 项新增测试覆盖标签版本不一致、不可发布的包、同版本产物冲突，以及 registry 的 404 / 401 / 500 区分。
+- 本次没有创建新版本标签，也没有上传 npm 包。npm 凭据或 Trusted Publisher 的授权需要由维护者配置；本地预览不能验证 GitHub OIDC 和 npm 发布权限。

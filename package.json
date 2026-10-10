@@ -13,7 +13,12 @@
     "test": "tsx --test tests/*.test.ts",
     "check": "pnpm typecheck && pnpm test && pnpm build",
     "pack:cli": "pnpm build && pnpm --dir packages/cli pack --pack-destination ../../artifacts",
-    "pack:check": "node scripts/pack-check.mjs"
+    "pack:check": "node scripts/pack-check.mjs",
+    "release:prepare": "pnpm typecheck && pnpm test && pnpm pack:cli && pnpm pack:check",
+    "release:dry-run": "pnpm release:prepare && node scripts/publish.mjs --dry-run",
+    "release:npm": "pnpm release:prepare && node scripts/publish.mjs",
+    "release:tag-check": "node scripts/check-release-tag.mjs",
+    "release:verify": "node scripts/verify-publish.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
