@@ -1,12 +1,19 @@
 {
   "name": "mdnook",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Browse a local Markdown folder in an explorer-style web reader.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oft/mdnook.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/oft/mdnook#readme",
+  "bugs": { "url": "https://github.com/oft/mdnook/issues" },
   "engines": { "node": ">=22.12.0" },
   "bin": { "mdnook": "dist/cli.js" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
   "keywords": ["markdown", "viewer", "cli", "documentation", "vue"],
   "dependencies": {
     "@hono/node-server": "^2.1.4",

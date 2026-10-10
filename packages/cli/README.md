@@ -2,6 +2,8 @@
 
 在浏览器中查看本地 Markdown 目录。左侧目录树、当前目录文件列表与文档预览同时显示，支持相对链接、本地图片、代码高亮和标题目录。
 
+包版本：`0.0.1`。源码仓库：[oft/mdnook](https://github.com/oft/mdnook)。
+
 ## 使用
 
 需要 Node.js **22.12 或更新版本**。包发布后可使用：
@@ -69,12 +71,12 @@ pnpm pack:cli
 pnpm pack:check
 ```
 
-`pnpm pack:cli` 输出 `artifacts/mdnook-0.1.0.tgz`。`pack:check` 将当前包安装到工作区内独立临时目录，仅安装生产依赖，验证命令入口、API、前端资源、深链接和退出后端口释放，然后清理临时目录。
+`pnpm pack:cli` 输出 `artifacts/mdnook-0.0.1.tgz`。`pack:check` 将当前包安装到工作区内独立临时目录，仅安装生产依赖，验证命令入口、API、前端资源、深链接和退出后端口释放，然后清理临时目录。
 
 本地安装产物：
 
 ```bash
-npm install -g ./artifacts/mdnook-0.1.0.tgz
+npm install -g ./artifacts/mdnook-0.0.1.tgz
 mdnook ./docs
 ```
 

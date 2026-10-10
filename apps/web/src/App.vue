@@ -10,7 +10,7 @@ import Icon from './components/Icon.vue'
 
 const route = useRoute()
 const router = useRouter()
-const config = ref<AppConfig>({ name: 'mdnook', version: '0.1.0', rootName: '文档目录' })
+const config = ref<AppConfig>({ name: 'mdnook', version: '0.0.1', rootName: '文档目录' })
 const path = computed(() => typeof route.query.path === 'string' ? route.query.path : '')
 const documentPath = computed(() => route.path === '/document' ? path.value : '')
 const directory = computed(() => {

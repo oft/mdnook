@@ -27,4 +27,5 @@ await build({
 await cp(join(root, 'apps/web/dist'), join(cliDir, 'public'), { recursive: true })
 await cp(join(root, 'README.md'), join(root, 'packages/cli/README.md'))
 await cp(join(root, 'LICENSE'), join(root, 'packages/cli/LICENSE'))
+await cp(join(root, 'CHANGELOG.md'), join(root, 'packages/cli/CHANGELOG.md'))
 console.log(`mdnook ${manifest.version} → packages/cli/dist`)

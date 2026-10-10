@@ -1,4 +1,4 @@
-# mdnook 0.1.0 验收记录
+# mdnook 0.0.1 验收记录
 
 日期：2026-10-10。环境：Windows、Node.js 26.7.0、pnpm 10.28.1；浏览器为 Codex 内置 Chromium 页面。
 
@@ -7,10 +7,12 @@
 - `pnpm typecheck`：四个包的 TypeScript / Vue 类型检查。
 - `pnpm test`：9 项测试覆盖跨平台路径、中文与 URL 编码、越界拒绝、真实 Windows junction、文件类型与大小限制、附件、SPA 深链接、真实监听端口冲突及关闭。
 - `pnpm dev fixtures/docs`：Vite 5173、独立 API 8787；真实页面通过代理读取文档。按 Ctrl+C 停止后两个端口均关闭。
-- `pnpm pack:cli`：生产前端构建与 CLI 打包；生成 `artifacts/mdnook-0.1.0.tgz`，包中仅包含 CLI、前端资源、运行时依赖声明及说明文件。
+- `pnpm pack:cli`：生产前端构建与 CLI 打包；生成 `artifacts/mdnook-0.0.1.tgz`，包中仅包含 CLI、前端资源、运行时依赖声明、说明文件及更新记录。
 - `pnpm pack:check`：在独立临时目录以 npm 仅安装生产依赖、不执行安装脚本，验证版本、帮助、非法端口、不存在的目录、中文含空格的根目录、API、页面深链接、静态资源和停止后端口释放。发布产物没有私有 workspace 包的运行时依赖。
 
 ## 真实页面交互
+
+以下为首轮实现的页面交互记录；本次版本提交重新执行类型检查、9 项自动测试、构建和独立安装包检查。
 
 - 目录树、当前目录文件列表和 Markdown 预览同时显示，跳转后同步高亮。
 - Markdown 相对链接跨目录跳转、目录 README 自动预览、中文与带空格文件。
