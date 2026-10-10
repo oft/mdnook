@@ -1,0 +1,7 @@
+node_modules/
+dist/
+artifacts/
+.pack-check/
+.test-output/
+*.log
+.DS_Store

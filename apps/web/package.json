@@ -1,0 +1,21 @@
+{
+  "name": "@mdnook/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": {
+    "@mdnook/shared": "workspace:*",
+    "vue": "^3.5.43",
+    "vue-router": "^4.6.3",
+    "markdown-it": "^15.0.2",
+    "github-slugger": "^2.0.0",
+    "highlight.js": "^11.12.0",
+    "dompurify": "^3.4.16"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.2.0",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "vite": "^8.3.4"
+  }
+}

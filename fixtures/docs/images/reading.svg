@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="260" viewBox="0 0 800 260">
+  <rect width="800" height="260" rx="14" fill="#edf4ef"/>
+  <rect x="60" y="40" width="680" height="180" rx="10" fill="#fff" stroke="#d5e3da"/>
+  <path d="M220 40v180M400 40v180" stroke="#d5e3da"/>
+  <g fill="#a7c4b3"><rect x="87" y="69" width="90" height="9" rx="4"/><rect x="87" y="96" width="70" height="8" rx="4"/><rect x="104" y="123" width="80" height="8" rx="4"/><rect x="104" y="150" width="60" height="8" rx="4"/></g>
+  <rect x="239" y="62" width="141" height="36" rx="5" fill="#e8f3ed"/>
+  <g fill="#89ae99"><rect x="251" y="76" width="90" height="7" rx="3"/><rect x="251" y="120" width="85" height="7" rx="3"/><rect x="251" y="157" width="105" height="7" rx="3"/></g>
+  <rect x="430" y="70" width="180" height="13" rx="4" fill="#317758"/>
+  <g fill="#c7d6cd"><rect x="430" y="103" width="272" height="6" rx="3"/><rect x="430" y="121" width="258" height="6" rx="3"/><rect x="430" y="139" width="218" height="6" rx="3"/></g>
+  <rect x="430" y="165" width="270" height="30" rx="5" fill="#f1f5f2"/>
+</svg>
