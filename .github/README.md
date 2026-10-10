@@ -43,6 +43,6 @@ git push origin v0.0.3
 
 ## 重跑与确认
 
-Actions → Publish npm 可查看上传收据和安装包 artifact。若上传成功后 registry 暂时不可见，工作流会等待 metadata；可重跑同一标签的失败任务。同一版本且安装包 SHA-512 一致时跳过再次上传，不同产物则要求升级版本，不覆盖已发布版本。
+Actions → Publish npm 可查看上传收据和安装包 artifact。npm 接受上传后可能还需要几分钟处理，工作流最多等待 10 分钟查询 metadata；可重跑同一标签的失败任务。同一版本且安装包 SHA-512 一致时跳过再次上传，不同产物则要求升级版本，不覆盖已发布版本。重跑时会替换同名 artifact。
 
 也可在仓库根目录运行 `pnpm release:verify` 验证当前安装包对应的 registry 版本。`release:dry-run` 不验证发布凭据，仅预览上传内容。

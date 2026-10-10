@@ -53,3 +53,11 @@
 - 类型检查、12 项测试、生产构建、`mdnook-0.0.2.tgz` 独立安装与发布预览通过。
 - 修改后的工作流通过 actionlint 校验；发布步骤通过 OIDC 获取身份，不读取 `NPM_TOKEN`。
 - 此处记录本地发布前验证；实际 npm 发布及 Trusted Publisher 首次验证以 `v0.0.2` 的 GitHub Actions 发布运行结果为准。
+
+## 0.0.2 OIDC 发布与 registry 延迟
+
+- 发布运行：<https://github.com/oft/mdnook/actions/runs/38049446042>。npm 接受上传并签署 provenance；发布后提示需要几分钟处理，最初约 1 分钟的 metadata 检查等待不足。
+- 已从公开 registry 确认 `mdnook@0.0.2`、`latest = 0.0.2`，并确认发布身份包含 GitHub Trusted Publisher。
+- 下载原发布运行的 CI 安装包，确认 SHA-512 与 registry 中的安装包完全一致；对应提交的 Linux / Windows、Node 22.12 / 24 四组 CI 均通过。
+- 发布后的校验等待窗口延长到 10 分钟；新增延迟可用、校验值冲突和处理超时的回归测试。重跑保存安装包时允许替换同名 artifact。
+- CI 修复后的 14 项测试、脚本语法检查和 actionlint 校验均通过。

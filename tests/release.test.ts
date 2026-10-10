@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
 import { validateReleaseTag } from '../scripts/check-release-tag.mjs'
-import { publishedVersion, verifyPublishedVersion } from '../scripts/npm-registry.mjs'
+import { publishedVersion, verifyPublishedVersion, waitForPublishedVersion } from '../scripts/npm-registry.mjs'
 
 const manifest = { name: 'mdnook', version: '0.0.1' }
 
@@ -47,4 +47,33 @@ test('registry lookup treats only 404 as unpublished and rejects authorization/s
   assert.equal(await publishedVersion('mdnook', 'absent', registry), null)
   await assert.rejects(publishedVersion('mdnook', '401', registry), /HTTP 401/)
   await assert.rejects(publishedVersion('mdnook', '500', registry), /HTTP 500/)
+})
+
+test('post-publish verification waits for delayed metadata without another upload', async () => {
+  const integrity = 'sha512-tested-tarball'
+  const metadata = { ...manifest, dist: { integrity } }
+  let lookups = 0
+  const waits: number[] = []
+  const result = await waitForPublishedVersion(manifest, integrity, {
+    timeoutMs: 1000, intervalMs: 1,
+    lookup: async () => ++lookups < 3 ? null : metadata,
+    onWait: ({ attempt }: { attempt: number }) => waits.push(attempt),
+  })
+  assert.equal(result, metadata)
+  assert.equal(lookups, 3)
+  assert.deepEqual(waits, [1, 2])
+})
+
+test('post-publish verification rejects an integrity conflict immediately and reports processing timeouts', async () => {
+  let lookups = 0
+  await assert.rejects(waitForPublishedVersion(manifest, 'sha512-tested-tarball', {
+    lookup: async () => {
+      lookups++
+      return { ...manifest, dist: { integrity: 'sha512-another-tarball' } }
+    },
+  }), /安装包不同/)
+  assert.equal(lookups, 1)
+  await assert.rejects(waitForPublishedVersion(manifest, 'sha512-tested-tarball', {
+    timeoutMs: 0, lookup: async () => null,
+  }), /等待 registry metadata 超时/)
 })
