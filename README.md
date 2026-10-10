@@ -2,7 +2,7 @@
 
 在浏览器中查看本地 Markdown 目录。左侧目录树、当前目录文件列表与文档预览同时显示，支持相对链接、本地图片、代码高亮和标题目录。
 
-包版本：`0.0.1`。源码仓库：[oft/mdnook](https://github.com/oft/mdnook)。
+包版本：`0.0.2`。源码仓库：[oft/mdnook](https://github.com/oft/mdnook)。
 
 ## 使用
 
@@ -71,12 +71,12 @@ pnpm pack:cli
 pnpm pack:check
 ```
 
-`pnpm pack:cli` 输出 `artifacts/mdnook-0.0.1.tgz`。`pack:check` 将当前包安装到工作区内独立临时目录，仅安装生产依赖，验证命令入口、API、前端资源、深链接和退出后端口释放，然后清理临时目录。
+`pnpm pack:cli` 输出 `artifacts/mdnook-0.0.2.tgz`。`pack:check` 将当前包安装到工作区内独立临时目录，仅安装生产依赖，验证命令入口、API、前端资源、深链接和退出后端口释放，然后清理临时目录。
 
 本地安装产物：
 
 ```bash
-npm install -g ./artifacts/mdnook-0.0.1.tgz
+npm install -g ./artifacts/mdnook-0.0.2.tgz
 mdnook ./docs
 ```
 
@@ -94,13 +94,13 @@ pnpm release:npm           # 构建、验证并正式发布
 
 两个命令均执行类型检查、测试、构建与独立安装验证，再使用 npm 发布当前 `packages/cli/package.json` 版本对应的 `.tgz`。目标为官方 registry，公开包，标签为 `latest`。如 npm 要求双因素认证，按终端提示完成即可。
 
-`pnpm release:prepare` 仅构建和验证。构建、打包及预览命令均不上传；只有 `release:npm` 执行正式发布。发布成功后可运行 `npm view mdnook@0.0.1 version --registry=https://registry.npmjs.org/` 确认；若 metadata 暂时返回 404，稍后重新查询即可。
+`pnpm release:prepare` 仅构建和验证。构建、打包及预览命令均不上传；只有 `release:npm` 执行正式发布。发布成功后可运行 `npm view mdnook@0.0.2 version --registry=https://registry.npmjs.org/` 确认；若 metadata 暂时返回 404，稍后重新查询即可。
 
 ### GitHub 标签自动发布
 
 仓库包含 `.github/workflows/publish.yml`。推送与包版本一致的 `vX.X.X` 标签后，GitHub Actions 自动构建、测试并发布到 npm，保存安装包 artifact，再核对 registry 中的版本和 SHA-512。普通分支更新和 Pull Request 执行 CI 检查。
 
-首次发布配置仓库 Secret `NPM_TOKEN`；已有 npm 包可配置 `oft / mdnook / publish.yml` 为 Trusted Publisher，使用 OIDC 发布。凭据配置与推送步骤见 [GitHub Actions 发布说明](https://github.com/oft/mdnook/blob/main/.github/README.md)。
+自动发布使用 npm Trusted Publisher（OIDC），将 `oft / mdnook / publish.yml` 配置为受信任发布者，无需仓库 Secret `NPM_TOKEN`。配置与推送步骤见 [GitHub Actions 发布说明](https://github.com/oft/mdnook/blob/main/.github/README.md)。
 
 ## API
 

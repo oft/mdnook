@@ -46,3 +46,10 @@
 - actionlint 1.7.12：两个工作流的语法及 GitHub Actions 配置校验通过。
 - 本地 `pnpm release:dry-run` 通过：类型检查、12 项测试、构建、独立 npm 安装和发布预览。其中 3 项新增测试覆盖标签版本不一致、不可发布的包、同版本产物冲突，以及 registry 的 404 / 401 / 500 区分。
 - 本次没有创建新版本标签，也没有上传 npm 包。npm 凭据或 Trusted Publisher 的授权需要由维护者配置；本地预览不能验证 GitHub OIDC 和 npm 发布权限。
+
+## 0.0.2 发布准备
+
+- `pnpm release:tag-check v0.0.2` 通过，全部 workspace 包及运行界面版本统一为 `0.0.2`。
+- 类型检查、12 项测试、生产构建、`mdnook-0.0.2.tgz` 独立安装与发布预览通过。
+- 修改后的工作流通过 actionlint 校验；发布步骤通过 OIDC 获取身份，不读取 `NPM_TOKEN`。
+- 此处记录本地发布前验证；实际 npm 发布及 Trusted Publisher 首次验证以 `v0.0.2` 的 GitHub Actions 发布运行结果为准。

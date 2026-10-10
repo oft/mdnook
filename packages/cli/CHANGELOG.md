@@ -1,5 +1,13 @@
 # 更新记录
 
+## 0.0.2 — 2026-10-10
+
+- 添加本地发布预览、安装包验证及一键 npm 发布 scripts。
+- 推送 `vX.X.X` 标签后通过 GitHub Actions 自动构建并使用 npm Trusted Publisher（OIDC）发布。
+- 添加 Windows / Ubuntu、Node.js 22.12 / 24 的 CI 检查矩阵。
+- 校验标签版本、保存发布安装包，并核对 registry 中的版本及 SHA-512；重跑时跳过相同的已发布安装包。
+- 补充发布配置说明与版本 / registry 校验测试。
+
 ## 0.0.1 — 2026-10-10
 
 首个版本，提供本地 Markdown 目录阅读器。

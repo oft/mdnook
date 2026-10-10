@@ -44,6 +44,6 @@ jobs:
       - name: Publish to npm
         run: node scripts/publish.mjs --provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ''
       - name: Verify registry version and integrity
         run: node scripts/verify-publish.mjs

@@ -48,7 +48,7 @@ export async function createApp(options: ServerOptions) {
     return c.json({ error: { code: failure.code, message: failure.message } }, failure.status)
   })
 
-  app.get('/api/config', c => c.json({ name: 'mdnook', version: options.version ?? '0.0.1', rootName: store.rootName }))
+  app.get('/api/config', c => c.json({ name: 'mdnook', version: options.version ?? '0.0.2', rootName: store.rootName }))
   app.get('/api/entries', async c => c.json(await store.list(c.req.query('path') ?? '')))
   app.get('/api/document', async c => c.json(await store.document(c.req.query('path') ?? '')))
   app.get('/api/resolve', async c => c.json(await store.resolve(c.req.query('from') ?? '', c.req.query('href') ?? '')))
