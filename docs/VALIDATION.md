@@ -5,6 +5,8 @@
 - workspace、CLI 与开发显示版本同步为 `0.0.3`，README 安装示例和变更记录同步更新。
 - `pnpm release:dry-run` 通过：类型检查、56 项测试、生产构建、`mdnook-0.0.3.tgz` 打包、独立安装和 npm 上传预览；本地预演没有上传 npm。
 - `node scripts/check-release-tag.mjs v0.0.3` 通过。正式发布由推送 `v0.0.3` 标签触发仓库现有 GitHub Actions 工作流。
+- GitHub 发布工作流已完成 npm 上传和 registry 完整性校验。首次 CI 的 Node 24 通过，Node 22.12 在构建 Vite 配置时加载 workspace `.ts` 文件失败；随后将开发 API 改为只在开发模式经 `tsx` 加载。
+- 修复后 `pnpm check` 再次通过。本机 Node 22.18 关闭原生 TypeScript 后，真实 Vite 开发入口保持回环正文 200、非回环正文 401，生产构建与 `mdnook-0.0.3.tgz` 独立安装验证通过；Node 22.12 的 Windows / Ubuntu 验证由后续 CI 执行。
 
 ## 2026-10-14 开发服务认证与显式免认证参数
 
