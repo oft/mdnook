@@ -41,6 +41,17 @@ button:disabled { cursor: default; opacity: .3; }
 button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 button, a { touch-action: manipulation; }
 svg { flex-shrink: 0; vertical-align: middle; }
+.login-page { min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: var(--sidebar); }
+.login-card { width: min(100%, 400px); padding: 32px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: 0 12px 48px #17382a0a; }
+.login-brand { display: flex; align-items: center; gap: 10px; font-size: 26px; letter-spacing: -1px; }
+.login-card h1 { margin: 28px 0 10px; font-size: 22px; }
+.login-description, .login-note { font-size: 13px; line-height: 1.8; color: var(--muted); }
+.login-field { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; font-size: 13px; }
+.login-field input { min-width: 0; width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); }
+.login-submit { width: 100%; padding: 12px; border-radius: 7px; color: #fff; background: #246e54; font-weight: 600; }
+.login-submit:disabled { opacity: .65; }
+.login-error { font-size: 13px; line-height: 1.7; color: #b34b48; }
+.login-note { margin: 24px 0 0; font-size: 11px; }
 .app-shell { height: 100dvh; display: flex; flex-direction: column; background: var(--surface); overflow: hidden; }
 .app-header { height: 68px; min-height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 28px; gap: 24px; }
 .brand { display: flex; align-items: center; gap: 11px; font-size: 25px; font-weight: 730; letter-spacing: -1px; }

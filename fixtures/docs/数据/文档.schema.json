@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/document.schema.json",
+  "title": "文档信息",
+  "description": "文档的标题与阅读设置。",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string", "description": "文档标题" },
+    "enabled": { "type": "boolean", "description": "是否展示" },
+    "tags": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["title"]
+}

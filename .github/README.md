@@ -31,10 +31,10 @@
 ```bash
 pnpm release:dry-run
 git add .
-git commit -m "chore(release): prepare v0.0.3"
+git commit -m "chore(release): prepare v0.0.4"
 git push origin main
-git tag -a v0.0.3 -m "mdnook v0.0.3"
-git push origin v0.0.3
+git tag -a v0.0.4 -m "mdnook v0.0.4"
+git push origin v0.0.4
 ```
 
 标签必须严格为 `vX.X.X`，且与 `packages/cli/package.json` 的版本一致。预发布标签和版本不一致会被拒绝；普通分支 push 不发布 npm。

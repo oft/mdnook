@@ -1,6 +1,6 @@
 {
   "name": "mdnook",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Browse a local Markdown folder in an explorer-style web reader.",
   "type": "module",
   "license": "MIT",

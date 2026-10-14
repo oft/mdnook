@@ -1,7 +1,7 @@
 import { readdir, readFile, realpath, stat } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative, sep } from 'node:path'
-import { isMarkdown, normalizePath, parseReference } from '@mdnook/shared'
-import type { DirectoryListing, DocumentData, Entry, ResolvedReference } from '@mdnook/shared'
+import { assetUrl, fileExtension, fileMediaType, isImage, isMarkdown, isText, normalizePath, parseReference } from '@mdnook/shared'
+import type { DirectoryListing, DocumentData, Entry, FileInfo, ResolvedReference } from '@mdnook/shared'
 
 export class FileError extends Error {
   constructor(public code: string, message: string, public status: 400 | 403 | 404 | 413 | 415 | 500 = 400) {
@@ -78,6 +78,19 @@ export class DocumentStore {
     }
   }
 
+  async file(input: string): Promise<FileInfo> {
+    const { path, absolute } = await this.locate(input)
+    try {
+      const info = await stat(absolute)
+      if (!info.isFile()) throw new FileError('NOT_FILE', '目标不是文件', 415)
+      return {
+        path, name: basename(path), extension: fileExtension(path), mediaType: fileMediaType(path),
+        size: info.size, modifiedAt: info.mtime.toISOString(),
+        assetUrl: assetUrl(path), downloadUrl: assetUrl(path, true),
+      }
+    } catch (error) { throw translateError(error) }
+  }
+
   async document(input: string): Promise<DocumentData> {
     const { path, absolute } = await this.locate(input)
     if (!isMarkdown(path)) throw new FileError('NOT_MARKDOWN', '请选择 Markdown 文件', 415)
@@ -86,6 +99,23 @@ export class DocumentStore {
       if (!info.isFile()) throw new FileError('NOT_FILE', '目标不是文档文件', 415)
       if (info.size > maxDocumentSize) throw new FileError('DOCUMENT_TOO_LARGE', '文档超过 10 MiB，无法预览', 413)
       return { path, content: await readFile(absolute, 'utf8'), modifiedAt: info.mtime.toISOString() }
+    } catch (error) { throw translateError(error) }
+  }
+
+  async text(input: string): Promise<DocumentData> {
+    const { path, absolute } = await this.locate(input)
+    if (!isText(path)) throw new FileError('NOT_TEXT', '此文件格式暂不支持文本预览', 415)
+    try {
+      const info = await stat(absolute)
+      if (!info.isFile()) throw new FileError('NOT_FILE', '目标不是文件', 415)
+      if (info.size > maxDocumentSize) throw new FileError('TEXT_TOO_LARGE', '文本超过 10 MiB，无法预览', 413)
+      const bytes = await readFile(absolute)
+      if (bytes.length > maxDocumentSize) throw new FileError('TEXT_TOO_LARGE', '文本超过 10 MiB，无法预览', 413)
+      let content: string
+      try { content = new TextDecoder('utf-8', { fatal: true }).decode(bytes) }
+      catch { throw new FileError('INVALID_TEXT', '文本不是有效的 UTF-8 编码', 415) }
+      if (content.includes('\0')) throw new FileError('INVALID_TEXT', '文件包含二进制内容，无法作为文本预览', 415)
+      return { path, content, modifiedAt: info.mtime.toISOString() }
     } catch (error) { throw translateError(error) }
   }
 
@@ -100,7 +130,7 @@ export class DocumentStore {
       const info = await stat(target.absolute)
       if (!info.isFile() && !info.isDirectory()) throw new FileError('NOT_FILE', '不支持此文件类型', 415)
       return {
-        kind: info.isDirectory() ? 'directory' : isMarkdown(target.path) ? 'document' : 'asset',
+        kind: info.isDirectory() ? 'directory' : isMarkdown(target.path) ? 'document' : isImage(target.path) ? 'image' : 'asset',
         path: target.path, hash: reference.hash,
       }
     } catch (error) { throw translateError(error) }

@@ -1,0 +1,7 @@
+{
+  "title": "文档空间",
+  "enabled": true,
+  "tags": ["Markdown", "图片", "JSON"],
+  "reading": { "theme": "light", "width": 320 },
+  "empty": null
+}
